@@ -1,0 +1,13 @@
+[project]
+name = "matheaufgaben"
+version = "1.0.0"
+description = "Generiert Mathematik-Übungsaufgaben für die 8. Klasse Realschule als PDF"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "typst>=0.12.0",
+    "typer>=0.15.0",
+]
+
+[project.scripts]
+matheaufgaben = "matheaufgaben:main"
