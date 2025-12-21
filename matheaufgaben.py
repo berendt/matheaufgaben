@@ -24,8 +24,8 @@ app = typer.Typer(
 )
 
 
-class AufgabenTyp(str, Enum):
-    """Verfügbare Aufgabentypen."""
+class ExerciseType(str, Enum):
+    """Available exercise types."""
     rechteck_flaeche = "rechteck-flaeche"
     rechteck_umfang = "rechteck-umfang"
     rechteck_umstellung = "rechteck-umstellung"
@@ -248,54 +248,54 @@ WICHTIG für "erklaerung" - Ausführlich erklären für Kinder die Schwierigkeit
 Erstelle jetzt genau 10 verschiedene Aufgaben."""
 
 
-def get_single_type_prompt(aufgaben_typ: AufgabenTyp) -> str:
+def get_single_type_prompt(exercise_type: ExerciseType) -> str:
     """Generate a prompt for a single exercise of a specific type."""
-    typ_beschreibungen = {
-        AufgabenTyp.rechteck_flaeche: ("Rechteck", "Flächenberechnung", "standard", "rechteck",
+    type_descriptions = {
+        ExerciseType.rechteck_flaeche: ("Rechteck", "Flächenberechnung", "standard", "rechteck",
             "Berechne die Fläche eines Rechtecks. Gegeben sind Seite a und Seite b, gesucht ist A."),
-        AufgabenTyp.rechteck_umfang: ("Rechteck", "Umfangberechnung", "standard", "rechteck",
+        ExerciseType.rechteck_umfang: ("Rechteck", "Umfangberechnung", "standard", "rechteck",
             "Berechne den Umfang eines Rechtecks. Gegeben sind Seite a und Seite b, gesucht ist U."),
-        AufgabenTyp.rechteck_umstellung: ("Rechteck", "Formelumstellung", "standard", "rechteck",
+        ExerciseType.rechteck_umstellung: ("Rechteck", "Formelumstellung", "standard", "rechteck",
             "Berechne eine fehlende Seite eines Rechtecks. Gegeben sind Fläche A und eine Seite, gesucht ist die andere Seite."),
-        AufgabenTyp.quadrat_flaeche: ("Quadrat", "Flächenberechnung", "standard", "quadrat",
+        ExerciseType.quadrat_flaeche: ("Quadrat", "Flächenberechnung", "standard", "quadrat",
             "Berechne die Fläche eines Quadrats. Gegeben ist Seite a, gesucht ist A."),
-        AufgabenTyp.quadrat_umfang: ("Quadrat", "Umfangberechnung", "standard", "quadrat",
+        ExerciseType.quadrat_umfang: ("Quadrat", "Umfangberechnung", "standard", "quadrat",
             "Berechne den Umfang eines Quadrats. Gegeben ist Seite a, gesucht ist U."),
-        AufgabenTyp.quadrat_umstellung: ("Quadrat", "Formelumstellung", "standard", "quadrat",
+        ExerciseType.quadrat_umstellung: ("Quadrat", "Formelumstellung", "standard", "quadrat",
             "Berechne die Seitenlänge eines Quadrats. Gegeben ist die Fläche A, gesucht ist a (Wurzel ziehen!)."),
-        AufgabenTyp.dreieck_flaeche: ("Dreieck", "Flächenberechnung", "standard", "dreieck",
+        ExerciseType.dreieck_flaeche: ("Dreieck", "Flächenberechnung", "standard", "dreieck",
             "Berechne die Fläche eines Dreiecks. Gegeben sind Grundseite g und Höhe h, gesucht ist A."),
-        AufgabenTyp.dreieck_umfang: ("Dreieck", "Umfangberechnung", "standard", "dreieck_umfang",
+        ExerciseType.dreieck_umfang: ("Dreieck", "Umfangberechnung", "standard", "dreieck_umfang",
             "Berechne den Umfang eines Dreiecks. Gegeben sind alle drei Seiten a, b, c, gesucht ist U."),
-        AufgabenTyp.dreieck_umstellung: ("Dreieck", "Formelumstellung", "standard", "dreieck",
+        ExerciseType.dreieck_umstellung: ("Dreieck", "Formelumstellung", "standard", "dreieck",
             "Berechne eine fehlende Größe eines Dreiecks. Gegeben sind Fläche A und entweder g oder h, gesucht ist die andere."),
-        AufgabenTyp.parallelogramm_flaeche: ("Parallelogramm", "Flächenberechnung", "standard", "parallelogramm",
+        ExerciseType.parallelogramm_flaeche: ("Parallelogramm", "Flächenberechnung", "standard", "parallelogramm",
             "Berechne die Fläche eines Parallelogramms. Gegeben sind Seite a und Höhe h, gesucht ist A."),
-        AufgabenTyp.parallelogramm_umfang: ("Parallelogramm", "Umfangberechnung", "standard", "parallelogramm",
+        ExerciseType.parallelogramm_umfang: ("Parallelogramm", "Umfangberechnung", "standard", "parallelogramm",
             "Berechne den Umfang eines Parallelogramms. Gegeben sind Seite a und Seite b, gesucht ist U."),
-        AufgabenTyp.parallelogramm_umstellung: ("Parallelogramm", "Formelumstellung", "standard", "parallelogramm",
+        ExerciseType.parallelogramm_umstellung: ("Parallelogramm", "Formelumstellung", "standard", "parallelogramm",
             "Berechne eine fehlende Größe eines Parallelogramms. Gegeben sind Fläche A und entweder a oder h."),
-        AufgabenTyp.tabelle_rechteck: ("Rechteck", "Tabelle", "tabelle", "rechteck",
+        ExerciseType.tabelle_rechteck: ("Rechteck", "Tabelle", "tabelle", "rechteck",
             "Erstelle eine Tabellenaufgabe mit 4 Rechtecken. Spalten: a, b, U, A. Verschiedene Einheiten pro Zeile!"),
-        AufgabenTyp.tabelle_quadrat: ("Quadrat", "Tabelle", "tabelle", "quadrat",
+        ExerciseType.tabelle_quadrat: ("Quadrat", "Tabelle", "tabelle", "quadrat",
             "Erstelle eine Tabellenaufgabe mit 4 Quadraten. Spalten: a, U, A. Verschiedene Einheiten pro Zeile!"),
-        AufgabenTyp.tabelle_dreieck: ("Dreieck", "Tabelle", "tabelle", "dreieck",
+        ExerciseType.tabelle_dreieck: ("Dreieck", "Tabelle", "tabelle", "dreieck",
             "Erstelle eine Tabellenaufgabe mit 4 Dreiecken. Spalten: g, h, A. Verschiedene Einheiten pro Zeile!"),
-        AufgabenTyp.tabelle_parallelogramm: ("Parallelogramm", "Tabelle", "tabelle", "parallelogramm",
+        ExerciseType.tabelle_parallelogramm: ("Parallelogramm", "Tabelle", "tabelle", "parallelogramm",
             "Erstelle eine Tabellenaufgabe mit 4 Parallelogrammen. Spalten: a, h, A. Verschiedene Einheiten pro Zeile!"),
-        AufgabenTyp.koordinaten_rechteck: ("Rechteck", "Koordinaten", "koordinaten", "rechteck",
+        ExerciseType.koordinaten_rechteck: ("Rechteck", "Koordinaten", "koordinaten", "rechteck",
             "Zeichne ein Rechteck mit 4 Eckpunkten A, B, C, D im Koordinatensystem und berechne Seitenlängen, Umfang und Fläche."),
-        AufgabenTyp.koordinaten_quadrat: ("Quadrat", "Koordinaten", "koordinaten", "quadrat",
+        ExerciseType.koordinaten_quadrat: ("Quadrat", "Koordinaten", "koordinaten", "quadrat",
             "Zeichne ein Quadrat mit 4 Eckpunkten A, B, C, D im Koordinatensystem und berechne Seitenlänge, Umfang und Fläche."),
-        AufgabenTyp.koordinaten_dreieck: ("Dreieck", "Koordinaten", "koordinaten", "dreieck",
+        ExerciseType.koordinaten_dreieck: ("Dreieck", "Koordinaten", "koordinaten", "dreieck",
             "Zeichne ein rechtwinkliges Dreieck mit 3 Eckpunkten A, B, C im Koordinatensystem und berechne Seitenlängen und Fläche."),
-        AufgabenTyp.koordinaten_parallelogramm: ("Parallelogramm", "Koordinaten", "koordinaten", "parallelogramm",
+        ExerciseType.koordinaten_parallelogramm: ("Parallelogramm", "Koordinaten", "koordinaten", "parallelogramm",
             "Zeichne ein Parallelogramm mit 4 Eckpunkten A, B, C, D im Koordinatensystem und berechne Seitenlängen, Umfang und Fläche."),
-        AufgabenTyp.textaufgabe: ("Textaufgabe", "Sachaufgabe", "standard", "rechteck",
+        ExerciseType.textaufgabe: ("Textaufgabe", "Sachaufgabe", "standard", "rechteck",
             "Erstelle eine kreative Textaufgabe/Sachaufgabe mit Geometrie im Alltag (NICHT Garten/Zaun!)."),
     }
 
-    figur, kategorie, typ, figur_typ, beschreibung = typ_beschreibungen[aufgaben_typ]
+    figure, category, typ, figure_type, description = type_descriptions[exercise_type]
 
     # Base prompt parts that are reused
     format_instructions = r'''
@@ -319,9 +319,9 @@ KRITISCH - SEHR AUSFÜHRLICHE ERKLÄRUNGEN (wie ein geduldiger Nachhilfelehrer):
 
     if typ == "tabelle":
         return f'''Du bist ein Mathematiklehrer für die 8. Klasse Realschule.
-Erstelle genau 1 Tabellenaufgabe zum Thema {figur}.
+Erstelle genau 1 Tabellenaufgabe zum Thema {figure}.
 
-{beschreibung}
+{description}
 
 Anforderungen:
 - VERSCHIEDENE EINHEITEN pro Zeile mischen (cm, m, mm)! NIEMALS dm!
@@ -332,12 +332,12 @@ Anforderungen:
 - VERMEIDE: 4, 5, 6, 8, 10, 12, 15, 20, 100
 {format_instructions}
 KRITISCH - Antworte mit NICHTS außer dem JSON. KEIN Text davor oder danach. Beginne DIREKT mit {{:
-{{"aufgaben": [{{"nummer": 1, "typ": "tabelle", "aufgabe": "Berechne die fehlenden Größen...", "figur": "{figur_typ}", "tabelle": {{"spalten": [...], "zeilen": [...], "loesungen": [...]}}, "erklaerung": "...", "loesung": "...", "kategorie": "{figur} - Tabelle"}}]}}'''
+{{"aufgaben": [{{"nummer": 1, "typ": "tabelle", "aufgabe": "Berechne die fehlenden Größen...", "figur": "{figure_type}", "tabelle": {{"spalten": [...], "zeilen": [...], "loesungen": [...]}}, "erklaerung": "...", "loesung": "...", "kategorie": "{figure} - Tabelle"}}]}}'''
     elif typ == "koordinaten":
         return f'''Du bist ein Mathematiklehrer für die 8. Klasse Realschule.
-Erstelle genau 1 Koordinatenaufgabe zum Thema {figur}.
+Erstelle genau 1 Koordinatenaufgabe zum Thema {figure}.
 
-{beschreibung}
+{description}
 
 Anforderungen:
 - Der Schüler zeichnet die Figur im Koordinatensystem nach Koordinatenvorgabe
@@ -351,12 +351,12 @@ Anforderungen:
 - Im Koordinatensystem gilt: 1 Einheit = 1 cm
 {format_instructions}
 KRITISCH - Antworte mit NICHTS außer dem JSON. KEIN Text davor oder danach. Beginne DIREKT mit {{:
-{{"aufgaben": [{{"nummer": 1, "typ": "koordinaten", "aufgabe": "Zeichne das {figur} ... in das Koordinatensystem ein. Berechne ...", "figur": "{figur_typ}", "koordinaten": {{"punkte": [{{"name": "A", "x": 2, "y": 3}}, ...], "max_x": 9, "max_y": 8, "gesucht": ["a", "b", "U", "A"]}}, "erklaerung": "...", "loesung": "...", "kategorie": "{figur} - Koordinaten"}}]}}'''
+{{"aufgaben": [{{"nummer": 1, "typ": "koordinaten", "aufgabe": "Zeichne das {figure} ... in das Koordinatensystem ein. Berechne ...", "figur": "{figure_type}", "koordinaten": {{"punkte": [{{"name": "A", "x": 2, "y": 3}}, ...], "max_x": 9, "max_y": 8, "gesucht": ["a", "b", "U", "A"]}}, "erklaerung": "...", "loesung": "...", "kategorie": "{figure} - Koordinaten"}}]}}'''
     else:
         return f'''Du bist ein Mathematiklehrer für die 8. Klasse Realschule.
-Erstelle genau 1 Aufgabe zum Thema {figur} - {kategorie}.
+Erstelle genau 1 Aufgabe zum Thema {figure} - {category}.
 
-{beschreibung}
+{description}
 
 Anforderungen:
 - KRITISCH: Würfle gedanklich NEUE Zahlen! NIEMALS Beispielzahlen kopieren!
@@ -366,7 +366,7 @@ Anforderungen:
 - Skizze mit allen gegebenen Werten und "?" für gesuchte Werte
 {format_instructions}
 KRITISCH - Antworte mit NICHTS außer dem JSON. KEIN Text davor oder danach. Beginne DIREKT mit {{:
-{{"aufgaben": [{{"nummer": 1, "typ": "standard", "aufgabe": "...", "figur": "{figur_typ}", "skizze": {{...}}, "erklaerung": "...", "loesung": "...", "kategorie": "{figur} - {kategorie}"}}]}}'''
+{{"aufgaben": [{{"nummer": 1, "typ": "standard", "aufgabe": "...", "figur": "{figure_type}", "skizze": {{...}}, "erklaerung": "...", "loesung": "...", "kategorie": "{figure} - {category}"}}]}}'''
 
 
 TYPST_TEMPLATE = r'''
@@ -752,24 +752,24 @@ SOLUTION_TABLE_TEMPLATE = r'''
 '''
 
 
-def generate_table(tabelle: dict, show_solutions: bool = False) -> tuple[str, str]:
+def generate_table(table_data: dict, show_solutions: bool = False) -> tuple[str, str]:
     """Generate Typst table markup for table exercises.
 
     Returns (header_row, data_rows) formatted for Typst table.
     """
-    spalten = tabelle.get("spalten", [])
-    zeilen = tabelle.get("zeilen", []) if not show_solutions else tabelle.get("loesungen", [])
+    columns = table_data.get("spalten", [])
+    rows = table_data.get("zeilen", []) if not show_solutions else table_data.get("loesungen", [])
 
     # Header row with bold column names (simple bold cells, not table.header)
-    header_cells = [f"[*{col}*]" for col in spalten]
+    header_cells = [f"[*{col}*]" for col in columns]
     header_row = ", ".join(header_cells) + ","
 
     # Data rows
     data_rows_parts = []
-    for zeile in zeilen:
+    for row in rows:
         row_cells = []
-        for col in spalten:
-            val = zeile.get(col, "")
+        for col in columns:
+            val = row.get(col, "")
             if val == "?":
                 # Question mark in red
                 row_cells.append('[#text(fill: rgb("#c0392b"))[?]]')
@@ -785,26 +785,26 @@ def generate_table(tabelle: dict, show_solutions: bool = False) -> tuple[str, st
     return header_row, data_rows
 
 
-def generate_coordinate_system(koordinaten: dict, show_solution: bool = False) -> str:
+def generate_coordinate_system(coord_data: dict, show_solution: bool = False) -> str:
     """Generate a coordinate system with optional shape drawn.
 
     Args:
-        koordinaten: Dict with 'punkte' (list of point dicts with 'name', 'x', 'y'),
-                    'figur' type, and 'max_x', 'max_y' for axis limits
+        coord_data: Dict with 'punkte' (list of point dicts with 'name', 'x', 'y'),
+                   'figur' type, and 'max_x', 'max_y' for axis limits
         show_solution: If True, draw the shape; if False, only show empty grid
     """
-    punkte = koordinaten.get("punkte", [])
-    max_x = koordinaten.get("max_x", 10)
-    max_y = koordinaten.get("max_y", 10)
+    points = coord_data.get("punkte", [])
+    max_x = coord_data.get("max_x", 10)
+    max_y = coord_data.get("max_y", 10)
 
     # Limit max values to ensure it fits on DIN A4 (at 0.7cm per unit, max 10 = 7cm)
     max_x = min(max_x, 10)
     max_y = min(max_y, 10)
 
     # Ensure max values are at least 2 units larger than the largest coordinate
-    if punkte:
-        largest_x = max(p.get("x", 0) for p in punkte)
-        largest_y = max(p.get("y", 0) for p in punkte)
+    if points:
+        largest_x = max(p.get("x", 0) for p in points)
+        largest_y = max(p.get("y", 0) for p in points)
         max_x = max(max_x, largest_x + 2)
         max_y = max(max_y, largest_y + 2)
         # Re-apply limits after adjustment
@@ -813,12 +813,12 @@ def generate_coordinate_system(koordinaten: dict, show_solution: bool = False) -
 
     points_markup = ""
 
-    if show_solution and punkte:
+    if show_solution and points:
         # Draw the shape by connecting points
-        point_coords = [(p["x"], p["y"]) for p in punkte]
+        point_coords = [(p["x"], p["y"]) for p in points]
 
         # Draw filled shape
-        coords_str = ", ".join([f'({p["x"]}, {p["y"]})' for p in punkte])
+        coords_str = ", ".join([f'({p["x"]}, {p["y"]})' for p in points])
         points_markup += f'''
   // Draw shape
   set-style(stroke: 1.5pt + rgb("#2e86ab"), fill: rgb("#2e86ab").transparentize(80%))
@@ -826,7 +826,7 @@ def generate_coordinate_system(koordinaten: dict, show_solution: bool = False) -
 '''
 
         # Draw and label points
-        for p in punkte:
+        for p in points:
             points_markup += f'''
   // Point {p["name"]}
   set-style(stroke: none, fill: rgb("#d62828"))
@@ -1002,15 +1002,15 @@ def repair_json(content: str) -> str:
     return content
 
 
-def generate_exercises(aufgaben_typ: Optional[AufgabenTyp] = None) -> list[dict]:
+def generate_exercises(exercise_type: Optional[ExerciseType] = None) -> list[dict]:
     """Call Claude CLI to generate exercises.
 
     Args:
-        aufgaben_typ: Optional specific exercise type. If None, generates 10 mixed exercises.
+        exercise_type: Optional specific exercise type. If None, generates 10 mixed exercises.
     """
-    if aufgaben_typ:
-        prompt = get_single_type_prompt(aufgaben_typ)
-        print(f"Generating 1 exercise of type '{aufgaben_typ.value}' with Claude CLI...")
+    if exercise_type:
+        prompt = get_single_type_prompt(exercise_type)
+        print(f"Generating 1 exercise of type '{exercise_type.value}' with Claude CLI...")
     else:
         prompt = PROMPT
         print("Generating exercises with Claude CLI...")
@@ -1214,16 +1214,16 @@ def create_typst_document(exercises: list[dict], show_grid: bool = False) -> str
 
         if exercise_type == "tabelle":
             # Table exercise
-            tabelle = exercise.get("tabelle", {})
-            spalten = tabelle.get("spalten", [])
-            header_row, data_rows = generate_table(tabelle, show_solutions=False)
+            table_data = exercise.get("tabelle", {})
+            columns = table_data.get("spalten", [])
+            header_row, data_rows = generate_table(table_data, show_solutions=False)
 
             exercise_parts.append(
                 EXERCISE_TABLE_TEMPLATE.format(
                     number=exercise.get("nummer", "?"),
                     category=exercise.get("kategorie", ""),
                     exercise_text=exercise.get("aufgabe", ""),
-                    num_cols=len(spalten),
+                    num_cols=len(columns),
                     header_row=header_row,
                     data_rows=data_rows,
                     grid=grid,
@@ -1231,8 +1231,8 @@ def create_typst_document(exercises: list[dict], show_grid: bool = False) -> str
             )
         elif exercise_type == "koordinaten":
             # Coordinate exercise with coordinate system
-            koordinaten = exercise.get("koordinaten", {})
-            coordinate_system = generate_coordinate_system(koordinaten, show_solution=False)
+            coord_data = exercise.get("koordinaten", {})
+            coordinate_system = generate_coordinate_system(coord_data, show_solution=False)
 
             exercise_parts.append(
                 EXERCISE_COORDINATE_TEMPLATE.format(
@@ -1278,15 +1278,15 @@ def create_typst_document(exercises: list[dict], show_grid: bool = False) -> str
 
         if exercise_type == "tabelle":
             # Table solution with filled-in answers
-            tabelle = exercise.get("tabelle", {})
-            spalten = tabelle.get("spalten", [])
-            header_row, solution_rows = generate_table(tabelle, show_solutions=True)
+            table_data = exercise.get("tabelle", {})
+            columns = table_data.get("spalten", [])
+            header_row, solution_rows = generate_table(table_data, show_solutions=True)
 
             solution_parts.append(
                 SOLUTION_TABLE_TEMPLATE.format(
                     number=exercise.get("nummer", "?"),
                     exercise_text=exercise.get("aufgabe", ""),
-                    num_cols=len(spalten),
+                    num_cols=len(columns),
                     header_row=header_row,
                     solution_rows=solution_rows,
                     explanation=exercise.get("erklaerung", ""),
@@ -1295,8 +1295,8 @@ def create_typst_document(exercises: list[dict], show_grid: bool = False) -> str
             )
         elif exercise_type == "koordinaten":
             # Coordinate solution with shape drawn
-            koordinaten = exercise.get("koordinaten", {})
-            coordinate_system_solution = generate_coordinate_system(koordinaten, show_solution=True)
+            coord_data = exercise.get("koordinaten", {})
+            coordinate_system_solution = generate_coordinate_system(coord_data, show_solution=True)
 
             solution_parts.append(
                 SOLUTION_COORDINATE_TEMPLATE.format(
@@ -1348,11 +1348,11 @@ def main(
         typer.Option("--karo", "-k", help="Fügt Karokästchen (Lineatur 28) zum Rechnen hinzu"),
     ] = False,
     typ: Annotated[
-        Optional[AufgabenTyp],
+        Optional[ExerciseType],
         typer.Option("--typ", "-t", help="Generiert nur 1 Aufgabe des angegebenen Typs"),
     ] = None,
 ) -> None:
-    """Generiert Mathematik-Übungsaufgaben für die 8. Klasse als PDF."""
+    """Generate math exercises for 8th grade as PDF."""
     # If a subcommand is invoked, don't run the main logic
     if ctx.invoked_subcommand is not None:
         return
@@ -1366,7 +1366,7 @@ def main(
         output_path = output_dir / f"matheaufgaben_{timestamp}.pdf"
 
     # Generate exercises
-    exercises = generate_exercises(aufgaben_typ=typ)
+    exercises = generate_exercises(exercise_type=typ)
 
     if not exercises:
         print("No exercises generated!")
@@ -1382,9 +1382,9 @@ def main(
 
 @app.command("typen")
 def list_types() -> None:
-    """Zeigt alle verfügbaren Aufgabentypen an."""
+    """List all available exercise types."""
     print("Verfügbare Aufgabentypen:\n")
-    for typ in AufgabenTyp:
+    for typ in ExerciseType:
         print(f"  {typ.value}")
     print("\nBeispiel: uv run python matheaufgaben.py --typ rechteck-flaeche")
 
