@@ -154,7 +154,3 @@ Alle Lösungen enthalten:
 - **CeTZ**: Typst-Bibliothek für geometrische Zeichnungen
 - **Claude AI**: Generiert die Aufgaben mit zufälligen, abwechslungsreichen Zahlen
 - **Typer**: CLI-Framework für die Benutzeroberfläche
-
-## Lizenz
-
-MIT License
