@@ -7,6 +7,7 @@ With geometric sketches (CeTZ)
 """
 
 import json
+import random
 import subprocess
 import sys
 from datetime import datetime
@@ -247,6 +248,31 @@ WICHTIG für "erklaerung" - Ausführlich erklären für Kinder die Schwierigkeit
 
 Erstelle jetzt genau 10 verschiedene Aufgaben."""
 
+
+
+def generate_random_seed_prompt() -> str:
+    """Generate a random seed section to inject into prompts for variety."""
+    # Generate random numbers from different ranges
+    small = random.sample(range(3, 16), 5)
+    medium = random.sample(range(17, 51), 5)
+    large = random.sample(range(52, 200), 3)
+    decimals = [round(random.uniform(2.0, 9.9), 1) for _ in range(4)]
+
+    # Random coordinates for coordinate exercises
+    coords = [(random.randint(1, 8), random.randint(1, 8)) for _ in range(4)]
+
+    # Random seed number
+    seed = random.randint(10000, 99999)
+
+    return f"""
+ZUFALLS-SEED #{seed} - NUTZE DIESE ZAHLEN:
+- Kleine Zahlen für diese Aufgabe: {small[0]}, {small[1]}, {small[2]}, {small[3]}, {small[4]}
+- Mittlere Zahlen: {medium[0]}, {medium[1]}, {medium[2]}, {medium[3]}, {medium[4]}
+- Große Zahlen: {large[0]}, {large[1]}, {large[2]}
+- Dezimalzahlen: {decimals[0]}, {decimals[1]}, {decimals[2]}, {decimals[3]}
+- Beispiel-Koordinaten: A({coords[0][0]}|{coords[0][1]}), B({coords[1][0]}|{coords[1][1]}), C({coords[2][0]}|{coords[2][1]}), D({coords[3][0]}|{coords[3][1]})
+WICHTIG: Wähle Zahlen aus diesen Listen! NICHT die Beispielzahlen aus dem restlichen Prompt!
+"""
 
 def get_single_type_prompt(exercise_type: ExerciseType) -> str:
     """Generate a prompt for a single exercise of a specific type."""
@@ -1008,12 +1034,18 @@ def generate_exercises(exercise_type: Optional[ExerciseType] = None) -> list[dic
     Args:
         exercise_type: Optional specific exercise type. If None, generates 10 mixed exercises.
     """
+    # Generate random seed section for variety
+    random_seed = generate_random_seed_prompt()
+
     if exercise_type:
-        prompt = get_single_type_prompt(exercise_type)
+        base_prompt = get_single_type_prompt(exercise_type)
         print(f"Generating 1 exercise of type '{exercise_type.value}' with Claude CLI...")
     else:
-        prompt = PROMPT
+        base_prompt = PROMPT
         print("Generating exercises with Claude CLI...")
+
+    # Inject random seed at the beginning of the prompt
+    prompt = random_seed + "\n" + base_prompt
 
     try:
         result = subprocess.run(
