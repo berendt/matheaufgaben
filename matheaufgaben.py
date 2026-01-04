@@ -1049,7 +1049,7 @@ def generate_exercises(exercise_type: Optional[ExerciseType] = None) -> list[dic
 
     try:
         result = subprocess.run(
-            ["claude", "-p", prompt, "--output-format", "json", "--model", "sonnet"],
+            ["claude", "-p", prompt, "--output-format", "json"],
             capture_output=True,
             text=True,
             check=True,
