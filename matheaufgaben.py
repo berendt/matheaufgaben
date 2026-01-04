@@ -71,6 +71,11 @@ Anforderungen:
 - Mische verschiedene Schwierigkeitsgrade
 - Bei Umstellungsaufgaben: Gib zwei Werte vor und lass den dritten berechnen
 - Verwende verschiedene Einheiten (cm, m, mm) - aber abwechselnd, nicht immer dieselbe!
+- WICHTIG: Vermeide Aufgaben, bei denen Wurzeln (sqrt) zur Lösung benötigt werden!
+  * NICHT: Gegeben A bei Quadrat, gesucht a (da a = sqrt(A) Wurzel erfordert)
+  * Stattdessen: Gegeben a, gesucht A oder U (keine Wurzel nötig)
+  * KEINE Aufgaben mit Pythagoras oder Diagonalberechnungen!
+  * Alle Lösungen sollen nur Grundrechenarten (Addition, Subtraktion, Multiplikation, Division) erfordern
 
 - WICHTIG: Aufgabe 8 muss eine TABELLENAUFGABE sein (typ="tabelle"):
   - Eine Tabelle mit 4 Zeilen (4 verschiedene Figuren desselben Typs, z.B. 4 Rechtecke)
@@ -160,9 +165,9 @@ BEISPIELE für GUTE Erklärungen (SO SOLL ES SEIN!):
 
 KRITISCH - ALLE Zwischenschritte zeigen:
 - Bei Umformungen JEDEN Schritt erklären, wie man darauf kommt!
-- Beispiel FALSCH: "A = a^2 || a = sqrt(A)" - hier fehlt der Zwischenschritt!
-- Beispiel RICHTIG: "A = a^2 // Die Formel für die Quadratfläche || a^2 = A // Wir tauschen die Seiten || a = sqrt(A) // Um a zu finden, ziehen wir die Wurzel aus beiden Seiten || a = sqrt(49 \"cm\"^2) // Wir setzen A = 49 cm² ein || a = 7 \"cm\" // Die Wurzel aus 49 ist 7"
-- Jede mathematische Operation (Wurzel ziehen, durch etwas teilen, mal 2 nehmen) braucht eine eigene Zeile mit Erklärung!
+- Beispiel FALSCH: "A = a · b || b = A/a" - hier fehlt der Zwischenschritt!
+- Beispiel RICHTIG: "A = a dot b // Die Formel für die Rechtecksfläche || A / a = b // Um b zu finden, teilen wir beide Seiten durch a || b = (35 \"cm\"^2) / (7 \"cm\") // Wir setzen A = 35 cm² und a = 7 cm ein || b = 5 \"cm\" // 35 geteilt durch 7 ergibt 5"
+- Jede mathematische Operation (durch etwas teilen, mal 2 nehmen, addieren) braucht eine eigene Zeile mit Erklärung!
 
 KRITISCH für Brüche mit Einheiten (wie im Mathebuch):
 - Bei Division IMMER Zahl UND Einheit zusammen in Zähler und Nenner
